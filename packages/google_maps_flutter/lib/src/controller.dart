@@ -76,6 +76,9 @@ class GoogleMapController {
       case 'map#onTap':
         _googleMapState.onTap(LatLng._fromJson(call.arguments['position']));
         break;
+      case 'map#onSnapshot':
+        _googleMapState.onSnaphot(call.arguments);
+        break;
       case 'map#onLongPress':
         _googleMapState
             .onLongPress(LatLng._fromJson(call.arguments['position']));
@@ -218,6 +221,11 @@ class GoogleMapController {
     final Map<String, int> point = await channel.invokeMapMethod<String, int>(
         'map#getScreenCoordinate', latLng._toJson());
     return ScreenCoordinate(x: point['x'], y: point['y']);
+  }
+
+  // Return map snaphot
+  Future<void> snapshot() async {
+    await channel.invokeMethod<void>('map#snapshot');
   }
 
   /// Returns [LatLng] corresponding to the [ScreenCoordinate] in the current map view.
